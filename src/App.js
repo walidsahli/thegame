@@ -1,25 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import Game from './Components/Game';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
+import ListGames from './Components/ListGames';
+
+
+export const playerContext = React.createContext({
+  player: null,
+  setPlayer : null,
+})
 
 function App() {
+  // creating context to store user's name 
+  const [player , setPlayer ] = React.useState('')
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <playerContext.Provider value={{
+      player,
+      setPlayer
+    }}>
+      <div className="App">
+        <Router>
+          <Switch>
+            <Route path='/' exact>
+              <ListGames />
+            </Route>
+            <Route path='/game/:id' >
+              <Game />
+            </Route>
+            <Route path='**'>
+              <Redirect to='/' />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </playerContext.Provider>
   );
 }
 
